@@ -1,3 +1,2 @@
 
-from verse_validation.steps.create_footnote_list import create_footnote_list
 from verse_validation.steps.select_verse_range import select_verse_range
