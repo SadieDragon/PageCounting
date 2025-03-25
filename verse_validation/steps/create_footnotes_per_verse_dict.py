@@ -1,4 +1,6 @@
 
+# This is step 2 of the process.
+
 from verse_validation.utils import create_footnote_list
 
 
