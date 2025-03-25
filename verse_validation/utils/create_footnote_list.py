@@ -1,5 +1,5 @@
 
-from verse_validation.utils import LetterIterator
+from verse_validation.utils.letter_iterator import LetterIterator
 
 
 def create_footnote_list(first_footnote: str, last_footnote: str) -> list[str]:
@@ -32,5 +32,8 @@ def create_footnote_list(first_footnote: str, last_footnote: str) -> list[str]:
     while (current_note != last_footnote):
         current_note = next(letter_iterator)
         footnote_list.append(current_note)
+
+    # Remove the ending footnote
+    footnote_list.pop()
 
     return footnote_list
