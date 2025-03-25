@@ -4,3 +4,9 @@ testing_env
 
 # "Do not nest this folder, VSCode"
 t.txt
+
+# The stupid cache files
+__pycache__
+
+# Root test file
+test.py
