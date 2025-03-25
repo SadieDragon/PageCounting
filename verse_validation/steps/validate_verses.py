@@ -1,8 +1,7 @@
 
 # This is step 3 of the process.
 
-def validate_verses(footnotes_per_verse: dict[str, list[str]]) \
-        -> list[list[str]]:
+def validate_verses(footnotes_per_verse: dict[str, list[str]]) -> list[str]:
     '''
     Queries if any footnote in the verse is a valid reference.
 
@@ -11,14 +10,12 @@ def validate_verses(footnotes_per_verse: dict[str, list[str]]) \
             list of footnotes mapped to them.
 
     Returns:
-        (list[list[str]]): The valid verses, the invalid verses.
+        (list[str]): The valid verses.
     '''
     # The output list
     valid_verses = []
-    invalid_verses = []
 
     # Iterate through the dict
-    was_valid = False
     for verse, footnotes in footnotes_per_verse.items():
         # Iterate through the footnotes to check if any are valid
         for footnote in footnotes:
@@ -30,14 +27,18 @@ def validate_verses(footnotes_per_verse: dict[str, list[str]]) \
             # store it, and break out of the loop
             if 'y' in has_refs:
                 valid_verses.append(verse)
-                was_valid = True
                 break
 
-        # If it was not valid, store it in the invalid verses
-        if not was_valid:
-            invalid_verses.append(verse)
+    return valid_verses
 
-        # Ensure the flag is always reset
-        was_valid = False
 
-    return [valid_verses, invalid_verses]
+# This code should replace the wonky flagging in this function, by checking
+#   for which verses were not marked as valid in the function that calls this.
+
+# You have a list of verses on the page. `verses_on_page`, probably.
+# You have the result of this function, which boils down the og list to just
+#   the valid verses on the page. `valid_verses`, probably.
+
+# Use this answer to then create `invalid_verses`, which I do also want to
+#   store (just not with pagination).
+# https://stackoverflow.com/a/41125943
