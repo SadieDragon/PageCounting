@@ -49,6 +49,9 @@ class VerseValidation:
         # Load the session data
         self.load_session(reload_from_error)
 
+        # And run the program
+        self.verse_validation()
+
     # Session Saving ==========================================================
 
     def dump_valid_verses(self) -> None:
