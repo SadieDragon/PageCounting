@@ -34,7 +34,7 @@ class CreateFootnotesPerVerseDict:
         self.current_first = ''
 
         # Run the process
-        return self.create_footnotes_per_verse_dict()
+        self.create_footnotes_per_verse_dict()
 
     def create_footnote_list(self) -> list[str]:
         '''
