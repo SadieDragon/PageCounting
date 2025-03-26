@@ -4,6 +4,7 @@ from os import getcwd
 from pathlib import Path
 from pythonbible import get_references
 from verse_validation.steps import (create_footnotes_per_verse_dict,
+                                    Pagination,
                                     select_verse_range,
                                     validate_verses)
 from verse_validation.utils import BookIterator
@@ -147,6 +148,9 @@ class VerseValidation:
         '''
         Runs all of the processes together to validate verses.
         '''
+        # A flag for "end of Bible"
+        to_paginate = False
+
         # For the pages we wanted to do:
         for _ in range(self.pages_to_do):
             # Increment the page of the Bible we are on
@@ -156,12 +160,6 @@ class VerseValidation:
             verse_range = select_verse_range(self.current_book,
                                              self.page_of_bible)
 
-            # If the last verse of the range is the book endpoint,
-            # increment the book we are on
-            if verse_range[-1] == self.book_endpoint:
-                self.current_book = next(self.book_iter)
-                self.book_endpoint = self.get_last_verse()
-
             # Get the footnotes per verse
             f_p_v = create_footnotes_per_verse_dict(verse_range,
                                                     self.valid_verses)
@@ -169,10 +167,26 @@ class VerseValidation:
             # Add the new valid verses to the old
             self.valid_verses = self.valid_verses + validate_verses(f_p_v)
 
+            # If the last verse of the range is the book endpoint,
+            # increment the book we are on
+            if verse_range[-1] == self.book_endpoint:
+                # If the current book is Revelation, break out, it's time!
+                if 'Rev' in self.current_book:
+                    # Set the flag, and get out
+                    to_paginate = True
+                    break
+
+                self.current_book = next(self.book_iter)
+                self.book_endpoint = self.get_last_verse()
+
             # Save session data after each iteration just to be safe
             self.save_session()
 
         # Dump valid verses into the text file
         self.dump_valid_verses()
+
+        # If we are to paginate, paginate
+        if to_paginate:
+            Pagination()
 
     # =========================================================================
