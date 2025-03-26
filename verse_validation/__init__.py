@@ -1,2 +1,2 @@
 
-from verse_validation.verse_validation import multi_step
+from verse_validation.verse_validation import VerseValidation
