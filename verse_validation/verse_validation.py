@@ -153,7 +153,8 @@ class VerseValidation:
             self.page_of_bible += 1
 
             # Get the range of verses
-            verse_range = select_verse_range(self.current_book)
+            verse_range = select_verse_range(self.current_book,
+                                             self.page_of_bible)
 
             # If the last verse of the range is the book endpoint,
             # increment the book we are on
