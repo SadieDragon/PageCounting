@@ -1,4 +1,5 @@
 
+from verse_validation.utils.book_iterator import BookIterator
 from verse_validation.utils.create_footnote_list \
     import create_footnote_list
 from verse_validation.utils.create_list_of_verses \
