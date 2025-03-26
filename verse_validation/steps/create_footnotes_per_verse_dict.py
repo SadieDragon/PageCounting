@@ -93,7 +93,7 @@ class CreateFootnotesPerVerseDict:
 
             # Ask for the first footnote of the verse
             query_msg = (f'What is the first footnote of {verse}? '
-                         '("skip" to initiate a block skip.)')
+                         '("skip" to initiate a block skip.) ')
             self.current_first = input(query_msg)
 
             # If there was no footnote, skip
