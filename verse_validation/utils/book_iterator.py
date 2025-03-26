@@ -19,7 +19,7 @@ class BookIterator:
         return self
 
     def __next__(self):
-        self.next_book()
+        return self.next_book()
 
     def next_book(self) -> str | None:
         '''
