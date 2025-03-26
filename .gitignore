@@ -10,3 +10,6 @@ __pycache__
 
 # Root test file
 test.py
+
+# Output folder
+session_data
