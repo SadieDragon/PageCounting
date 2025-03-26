@@ -79,7 +79,7 @@ class VerseValidation:
         if not self.session_file.exists():
             # Init the book iterator, and set the first endpoint
             self.current_book = next(self.book_iter)
-            self.book_endpoint = self.get_last_verse()
+            self.get_last_verse()
 
             # Init the page to be 0
             self.page_of_bible = 0
