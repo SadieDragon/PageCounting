@@ -11,12 +11,13 @@ class Pagination:
     current_book: str
     verses_per_book: dict[str, list[str]]
 
+    root_dir: Path
     output_dir: Path
 
     pages: dict[int, list[list[str]]]
     page_count: int
 
-    def __init__(self, valid_verses: list[str]):
+    def __init__(self):
         '''
         Runs the processes to paginate a set of valid verses.
         '''
@@ -24,18 +25,41 @@ class Pagination:
         self.current_book = ''
         self.pages = {}
         self.page_count = 0
-
-        # Process the valid verses down into books
         self.verses_per_book = {}
-        self.make_verses_per_book_dict(valid_verses)
+
+        # Create the path for the root dir
+        self.root_dir = Path(getcwd())
+
+        # Process the valid verses file into a full list
+        self.ingest_valid_verses()
 
         # Create the path to the output dir
-        self.output_dir = Path(getcwd()) / 'pages_per_book'
+        self.output_dir = self.root_dir / 'pages_per_book'
         # Make it if it doesn't exist
         self.output_dir.mkdir(exist_ok=True)
 
         # Do the processing thing
         self.process_verses()
+
+    def ingest_valid_verses(self) -> None:
+        '''
+        Read in the full set of valid verses, then process
+        them into a dict based on the books.
+        '''
+        # Grab the path to the valid verses file
+        valid_verses_file = (
+            self.root_dir /
+            'session_data' /
+            'valid_verses'
+        )
+        valid_verses_file = valid_verses_file.with_suffix('.txt')
+
+        # Open the file, and read in the lines
+        with valid_verses_file.open('r', encoding='utf-8') as f:
+            valid_verses = f.readlines()
+
+        # Wrap up by making them into the dict
+        self.make_verses_per_book_dict(valid_verses)
 
     def make_verses_per_book_dict(self, valid_verses: list[str]) -> None:
         '''

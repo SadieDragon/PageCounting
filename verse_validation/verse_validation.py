@@ -60,7 +60,9 @@ class VerseValidation:
 
         # Dump the verses into the file
         with self.valid_verses_file.open('a', encoding='utf-8') as f:
-            f.write(f'{self.valid_verses}\n')
+            # Dump the individual verses onto each line
+            for verse in self.valid_verses:
+                f.write(f'{verse}\n')
 
     def load_session(self, reload_from_error: bool) -> None:
         '''
