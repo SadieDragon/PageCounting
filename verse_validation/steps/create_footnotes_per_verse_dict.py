@@ -134,5 +134,3 @@ class CreateFootnotesPerVerseDict:
 
         # Store it at the previous verse's location
         self.footnotes_per_verse[self.previous_verse] = footnote_list
-
-        return self.footnotes_per_verse

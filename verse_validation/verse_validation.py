@@ -168,6 +168,7 @@ class VerseValidation:
             # Get the footnotes per verse
             f_p_v = CreateFootnotesPerVerseDict(verse_range,
                                                 self.valid_verses)
+            f_p_v = f_p_v.footnotes_per_verse
 
             # Add the new valid verses to the old
             self.valid_verses = self.valid_verses + validate_verses(f_p_v)
