@@ -3,7 +3,7 @@ from json import dump, load
 from os import getcwd
 from pathlib import Path
 from pythonbible import get_references
-from verse_validation.steps import (create_footnotes_per_verse_dict,
+from verse_validation.steps import (CreateFootnotesPerVerseDict,
                                     Pagination,
                                     select_verse_range,
                                     validate_verses)
@@ -79,7 +79,7 @@ class VerseValidation:
         if not self.session_file.exists():
             # Init the book iterator, and set the first endpoint
             self.current_book = next(self.book_iter)
-            self.book_endpoint = self.get_last_verse()
+            self.get_last_verse()
 
             # Init the page to be 0
             self.page_of_bible = 0
@@ -166,8 +166,9 @@ class VerseValidation:
                                              self.page_of_bible)
 
             # Get the footnotes per verse
-            f_p_v = create_footnotes_per_verse_dict(verse_range,
-                                                    self.valid_verses)
+            f_p_v = CreateFootnotesPerVerseDict(verse_range,
+                                                self.valid_verses)
+            f_p_v = f_p_v.footnotes_per_verse
 
             # Add the new valid verses to the old
             self.valid_verses = self.valid_verses + validate_verses(f_p_v)
