@@ -43,12 +43,12 @@ class CreateFootnotesPerVerseDict:
 
         Args:
             first_footnote (str): The first footnote of the list.
-            last_footnote (str): Where to stop the list. Gets popped off.
+            last_footnote (str): Where to stop the list.
 
         Returns:
             (list[str]): A list of footnotes between the
                 first footnote (inclusive) and the selected
-                final footnote (exclusive).
+                final footnote (inclusive).
         '''
         # Create the letter iterator used to generate the list
         letter_iterator = LetterIterator()
@@ -67,9 +67,6 @@ class CreateFootnotesPerVerseDict:
         while (current_note != self.current_first):
             current_note = next(letter_iterator)
             footnote_list.append(current_note)
-
-        # Remove the ending footnote
-        footnote_list.pop()
 
         return footnote_list
 
@@ -116,6 +113,10 @@ class CreateFootnotesPerVerseDict:
                 # Create a list of footnotes between previous and current first
                 footnote_list = self.create_footnote_list()
 
+                # Pop the last footnote, as the endpoint is
+                # exclusive in this instance
+                footnote_list.pop()
+
                 # Store the footnote list in the previous verse
                 self.footnotes_per_verse[self.previous_verse] = footnote_list
 
@@ -129,7 +130,7 @@ class CreateFootnotesPerVerseDict:
         # Ask what the last footnote of the page is
         self.current_first = input('What is the last footnote? ')
 
-        # Create the last footnote list
+        # Create the last footnote list, but not exclusive this time
         footnote_list = self.create_footnote_list()
 
         # Store it at the previous verse's location
