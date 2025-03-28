@@ -5,7 +5,7 @@ from pathlib import Path
 from pythonbible import get_references
 from verse_validation.steps import (CreateFootnotesPerVerseDict,
                                     Pagination,
-                                    select_verse_range,
+                                    # select_verse_range,
                                     validate_verses)
 from verse_validation.utils import BookIterator
 
@@ -162,8 +162,9 @@ class VerseValidation:
             self.page_of_bible += 1
 
             # Get the range of verses
-            verse_range = select_verse_range(self.current_book,
-                                             self.page_of_bible)
+            # verse_range = select_verse_range(self.current_book,
+            #                                  self.page_of_bible)
+            verse_range = []
 
             # Get the footnotes per verse
             f_p_v = CreateFootnotesPerVerseDict(verse_range,
