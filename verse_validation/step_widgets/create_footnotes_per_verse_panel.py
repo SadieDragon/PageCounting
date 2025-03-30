@@ -54,6 +54,8 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         # Checks for things like `Genesis`, `1 Kings`, `Song of Solomon`
         pattern = r'^(?:\d\s)?[A-Za-z]+(?:\s[A-Za-z]+)?'
         self.book = match(pattern, list_of_verses[0]).group()
+        # Add a space to the end of the book
+        self.book = f'{self.book} '
 
         # Store the inputs
         self.verse_iter = iter(list_of_verses)
@@ -84,7 +86,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         self.submit_button.pack(padx=5, pady=5)
 
         # TODO: Can I bind "enter" to confirm?
-        # TOOD: Can I bind something to "skip" without having to type out
+        # TODO: Can I bind something to "skip" without having to type out
         #   'skip' in the entry?
 
         self.load_next_verse()
@@ -161,6 +163,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         # If `StopIteration`, then we are done and need to wrap up
         except StopIteration:
             self.ask_for_last_footnote()
+            print('Calling for last footnote.')
 
     def process_entry(self) -> None:
         '''
@@ -233,6 +236,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         # Otherwise, try to load the next verse until the selected verse
         while (self.current_verse != skip_to):
+            print(f'Tried skip to {self.current_verse}, it wasn"t {skip_to}')
             self.load_next_verse()
 
     def update_previous_entry(self) -> None:
