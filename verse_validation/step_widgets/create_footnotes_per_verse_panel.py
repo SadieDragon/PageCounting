@@ -87,6 +87,8 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         # TOOD: Can I bind something to "skip" without having to type out
         #   'skip' in the entry?
 
+        self.load_next_verse()
+
     def ask_for_last_footnote(self) -> None:
         '''
         Creates an input dialog for the final footnote, and updates
