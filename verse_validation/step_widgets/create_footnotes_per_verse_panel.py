@@ -90,12 +90,18 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         # Bind the left shift key to init a skip
         parent.bind('<Shift_L>', self.skip_verses)
 
+        # Bind tab to end the page
+        parent.bind('<Tab>', self.ask_for_last_footnote)
+
         self.load_next_verse()
 
-    def ask_for_last_footnote(self) -> None:
+    def ask_for_last_footnote(self, *_) -> None:
         '''
         Creates an input dialog for the final footnote, and updates
         the last verse.
+
+        The `*_` arg is only for the keybind; it is unused (hence the
+        underscore). Anything you pass to this function *will* be ignored.
         '''
         # Create a dialogue window for the last footnote
         text = 'What is the last footnote?'
@@ -241,7 +247,6 @@ class CreateFootnotesPerVersePanel(CTkFrame):
             self.skip_verses()
             return
 
-        # TODO: keybind?
         # If they select `end`, jump to the end of the page
         if skip_to == 'end':
             self.ask_for_last_footnote()
