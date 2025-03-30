@@ -161,7 +161,6 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         # If `StopIteration`, then we are done and need to wrap up
         except StopIteration:
             self.ask_for_last_footnote()
-            print('Calling for last footnote.')
 
     def process_entry(self) -> None:
         '''
@@ -234,7 +233,6 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         # Otherwise, try to load the next verse until the selected verse
         while (self.current_verse != skip_to):
-            print(f'Tried skip to {self.current_verse}, it wasn"t {skip_to}')
             self.load_next_verse()
 
     def update_previous_entry(self) -> None:
