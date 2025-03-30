@@ -219,7 +219,9 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         '''
         # Ask which verse to skip to
         text = 'Skip to which verse? (Just need `chapter:verse`)'
-        skip_to = CTkInputDialog(title='Skip Verses', text=text)
+        skip_to_dialog = CTkInputDialog(title='Skip Verses', text=text)
+
+        skip_to = skip_to_dialog.get_input()
 
         # If they select none, or empty str, then re-run the query
         if (skip_to is None) or (not skip_to):
