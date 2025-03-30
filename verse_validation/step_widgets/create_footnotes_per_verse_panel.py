@@ -84,8 +84,6 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         self.submit_button.pack(padx=5, pady=5)
 
         # TODO: Can I bind "enter" to confirm?
-        # TODO: Can I bind something to "skip" without having to type out
-        #   'skip' in the entry?
 
         self.load_next_verse()
 
@@ -176,10 +174,14 @@ class CreateFootnotesPerVersePanel(CTkFrame):
             self.load_next_verse()
             return
 
+        # TODO: skip keybind
         # If 'skip', then initiate a skip
         if footnote == 'skip':
             self.skip_verses()
             return
+
+        # TODO: "undo" - go back a verse
+        # TODO: undo keybind
 
         # Otherwise, we have a valid first foonote
         self.current_first = footnote
@@ -223,9 +225,16 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         skip_to = skip_to_dialog.get_input()
 
+        # TODO: "Hey, uhm, I changed my mind. I don't wanna skip, actually"
         # If they select none, or empty str, then re-run the query
         if (skip_to is None) or (not skip_to):
             self.skip_verses()
+            return
+
+        # TODO: keybind?
+        # If they select `end`, jump to the end of the page
+        if skip_to == 'end':
+            self.ask_for_last_footnote()
             return
 
         # Prepend the book
