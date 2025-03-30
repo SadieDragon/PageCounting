@@ -33,6 +33,7 @@ class SelectVerseRangePanel(CTkFrame):
         '''
         # Create the frame for all of this stuff to go into
         super().__init__(parent)
+        self.pack(padx=5, pady=5)
 
         # Store the information that was passed in
         self.book = book

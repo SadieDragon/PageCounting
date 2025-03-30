@@ -47,7 +47,8 @@ class CreateFootnotesPerVersePanel(CTkFrame):
                 with the information.
         '''
         # Create the frame for all of this stuff to go into
-        super.__init__(parent)
+        super().__init__(parent)
+        self.pack(padx=5, pady=5)
 
         # Store the book, which is always attached to any verse in the list
         # Checks for things like `Genesis`, `1 Kings`, `Song of Solomon`
