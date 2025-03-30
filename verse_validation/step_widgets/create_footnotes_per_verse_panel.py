@@ -87,6 +87,9 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         # (surprise, this works for selecting a skip, too)
         parent.bind('<Return>', self.process_entry)
 
+        # Bind the left shift key to init a skip
+        parent.bind('<Shift_L>', self.skip_verses)
+
         self.load_next_verse()
 
     def ask_for_last_footnote(self) -> None:
@@ -179,7 +182,6 @@ class CreateFootnotesPerVersePanel(CTkFrame):
             self.load_next_verse()
             return
 
-        # TODO: skip keybind
         # If 'skip', then initiate a skip
         if footnote == 'skip':
             self.skip_verses()
@@ -220,9 +222,12 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         print(self.footnotes_per_verse)  # DEBUG
         self.destroy()
 
-    def skip_verses(self) -> None:
+    def skip_verses(self, *_) -> None:
         '''
         The process for skipping verses.
+
+        The `*_` arg is only for the keybind; it is unused (hence the
+        underscore). Anything you pass to this function *will* be ignored.
         '''
         # Ask which verse to skip to
         text = 'Skip to which verse? (Just need `chapter:verse`)'
