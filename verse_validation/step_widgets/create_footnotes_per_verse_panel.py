@@ -52,7 +52,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         # Store the book, which is always attached to any verse in the list
         # Checks for things like `Genesis`, `1 Kings`, `Song of Solomon`
-        pattern = r'^(?:\d\s)?[A-Za-z]+(?:\s[A-Za-z]+)*\s'
+        pattern = r'^(.*?)\d+:\d+$'
         self.book = match(pattern, list_of_verses[0]).group()
 
         # Store the inputs
