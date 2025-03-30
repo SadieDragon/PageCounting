@@ -83,7 +83,9 @@ class CreateFootnotesPerVersePanel(CTkFrame):
                                        command=self.process_entry)
         self.submit_button.pack(padx=5, pady=5)
 
-        # TODO: Can I bind "enter" to confirm?
+        # Bind 'enter' to confirm selection
+        # (surprise, this works for selecting a skip, too)
+        parent.bind('<Return>', self.process_entry)
 
         self.load_next_verse()
 
@@ -160,10 +162,13 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         except StopIteration:
             self.ask_for_last_footnote()
 
-    def process_entry(self) -> None:
+    def process_entry(self, *_) -> None:
         '''
         Processes the entry, and either proceeds with footnote processing,
         or initiates a skip.
+
+        The `*_` arg is only for the keybind; it is unused (hence the
+        underscore). Anything you pass to this function *will* be ignored.
         '''
         # Removes any trailing whitespace when getting the footnote
         # Also, lowercase the footnote should I accidentally have caps on
