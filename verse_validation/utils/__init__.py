@@ -1,3 +1,2 @@
 
-from verse_validation.utils.book_iterator import BookIterator
 from verse_validation.utils.letter_iterator import LetterIterator

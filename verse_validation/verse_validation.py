@@ -3,11 +3,12 @@ from json import dump, load
 from os import getcwd
 from pathlib import Path
 from pythonbible import get_references
+from verse_validation.bible_utils import BOOKS
 from verse_validation.steps import (CreateFootnotesPerVerseDict,
                                     Pagination,
                                     # select_verse_range,
                                     validate_verses)
-from verse_validation.utils import BookIterator
+from typing import Iterator
 
 
 class VerseValidation:
@@ -20,7 +21,7 @@ class VerseValidation:
     valid_verses_file: Path
 
     book_endpoint: str
-    book_iter: BookIterator
+    book_iter: Iterator[list]
     current_book: str
     page_of_bible: int
 
@@ -41,7 +42,7 @@ class VerseValidation:
         self.valid_verses_file = self.valid_verses_file.with_suffix('.txt')
 
         # Init the book iterator
-        self.book_iter = BookIterator()
+        self.book_iter = iter(BOOKS)
 
         # Init valid verses
         self.valid_verses = []
@@ -142,8 +143,16 @@ class VerseValidation:
         '''
         Updates the book iterator to be at the current book.
         '''
-        while self.current_book != self.book_iter.current_title:
-            next(self.book_iter)
+        # Reset the book iter, just in case
+        self.book_iter = iter(BOOKS)
+        # Grab the first book
+        new_book = next(self.book_iter)
+
+        # Safely try to set the current book
+        # TODO: If current book is somehow invalid, and newbook reaches
+        #   None, then raise an error safely.
+        while (new_book is not None) and (self.current_book != new_book):
+            new_book = next(self.book_iter)
 
     # =========================================================================
 
@@ -177,13 +186,15 @@ class VerseValidation:
             # If the last verse of the range is the book endpoint,
             # increment the book we are on
             if verse_range[-1] == self.book_endpoint:
-                # If the current book is Revelation, break out, it's time!
-                if 'Rev' in self.current_book:
-                    # Set the flag, and get out
+                # Iterate the book
+                self.current_book = next(self.book_iter, None)
+
+                # If None is returned, then it's time to paginate
+                if self.current_book is None:
                     to_paginate = True
                     break
 
-                self.current_book = next(self.book_iter)
+                # If a valid book, set the last verse
                 self.book_endpoint = self.get_last_verse()
 
             # Save session data after each iteration just to be safe
