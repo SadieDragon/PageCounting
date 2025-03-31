@@ -10,9 +10,12 @@ from typing import Iterator
 from re import match
 from verse_validation.gui_utils import create_label_entry_frame
 from verse_validation.utils import LetterIterator
+from typing import Callable  # TODO: This is deprecated; what's the correct?
 
 
 class CreateFootnotesPerVersePanel(CTkFrame):
+    parent: CTk
+
     verse_iter: Iterator[list[str]]
     list_of_valid_verses: list[str]
 
@@ -56,6 +59,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         self.book = match(pattern, list_of_verses[0]).group()
 
         # Store the inputs
+        self.parent = parent
         self.verse_iter = iter(list_of_verses)
         self.list_of_valid_verses = list_of_valid_verses
         self.callback = callback
@@ -76,6 +80,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         # Create the entry for the footnote
         text = 'What is the first footnote?'
         self.footnote_entry = create_label_entry_frame(self, text)
+        # TODO: Place my cursor blinkies plz
 
         # Create a button for the user to confirm and finish
         self.submit_button = CTkButton(self,
@@ -85,23 +90,31 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         # Bind 'enter' to confirm selection
         # (surprise, this works for selecting a skip, too)
-        parent.bind('<Return>', self.process_entry)
+        self.add_bind('Return', self.process_entry)
 
         # Bind the left shift key to init a skip
-        parent.bind('<Shift_L>', self.skip_verses)
+        self.add_bind('space', self.skip_verses)
 
         # Bind tab to end the page
-        parent.bind('<Tab>', self.ask_for_last_footnote)
+        self.add_bind('Tab', self.ask_for_last_footnote)
 
         self.load_next_verse()
 
-    def ask_for_last_footnote(self, *_) -> None:
+    def add_bind(self, key: str, fn: Callable[[], None]) -> None:
+        '''
+        A wrapper for binding a key to a fn without
+        spamming it with keypress information.
+
+        Args:
+            key (str): The keysm for the key that's to be bound.
+            fn (Callable[[], None]): The fn to bind to.
+        '''
+        self.parent.bind(f'<{key}>', lambda _: fn())
+
+    def ask_for_last_footnote(self) -> None:
         '''
         Creates an input dialog for the final footnote, and updates
         the last verse.
-
-        The `*_` arg is only for the keybind; it is unused (hence the
-        underscore). Anything you pass to this function *will* be ignored.
         '''
         # Create a dialogue window for the last footnote
         text = 'What is the last footnote?'
@@ -171,13 +184,10 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         except StopIteration:
             self.ask_for_last_footnote()
 
-    def process_entry(self, *_) -> None:
+    def process_entry(self) -> None:
         '''
         Processes the entry, and either proceeds with footnote processing,
         or initiates a skip.
-
-        The `*_` arg is only for the keybind; it is unused (hence the
-        underscore). Anything you pass to this function *will* be ignored.
         '''
         # Removes any trailing whitespace when getting the footnote
         # Also, lowercase the footnote should I accidentally have caps on
@@ -228,12 +238,9 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         print(self.footnotes_per_verse)  # DEBUG
         self.destroy()
 
-    def skip_verses(self, *_) -> None:
+    def skip_verses(self) -> None:
         '''
         The process for skipping verses.
-
-        The `*_` arg is only for the keybind; it is unused (hence the
-        underscore). Anything you pass to this function *will* be ignored.
         '''
         # Ask which verse to skip to
         text = 'Skip to which verse? (Just need `chapter:verse`)'
@@ -257,6 +264,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         # Otherwise, try to load the next verse until the selected verse
         while (self.current_verse != skip_to):
+            print(f'Tried to skip to {self.current_verse}; not {skip_to}')
             self.load_next_verse()
 
     def update_previous_entry(self) -> None:
