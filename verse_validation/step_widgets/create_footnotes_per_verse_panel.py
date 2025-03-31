@@ -1,4 +1,5 @@
 
+from collections.abc import Callable  # https://stackoverflow.com/a/71118433
 from customtkinter import (CTk,
                            CTkButton,
                            CTkEntry,
@@ -10,7 +11,6 @@ from typing import Iterator
 from re import match
 from verse_validation.gui_utils import create_label_entry_frame
 from verse_validation.utils import LetterIterator
-from typing import Callable  # TODO: This is deprecated; what's the correct?
 
 
 class CreateFootnotesPerVersePanel(CTkFrame):
