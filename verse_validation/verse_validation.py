@@ -2,8 +2,7 @@
 from json import dump, load
 from os import getcwd
 from pathlib import Path
-from pythonbible import get_references
-from verse_validation.bible_utils import BOOKS
+from verse_validation.bible_utils import BOOK_ENDPOINTS, BOOKS
 from verse_validation.steps import (CreateFootnotesPerVerseDict,
                                     Pagination,
                                     # select_verse_range,
@@ -129,15 +128,16 @@ class VerseValidation:
         '''
         Sets the endpoint verse for the current book.
         '''
-        # Get the normalized refs for the book
-        book_ref = get_references(self.current_book)[0]
+        # If the book is not in the endpoints, then something has gone wrong
+        # TODO: better error handling
+        if self.current_book not in BOOK_ENDPOINTS:
+            raise NotImplementedError
 
-        # Grab the end chapter and verse for PEP8 compliance cleanliness
-        end_chapter = book_ref.end_chapter
-        end_verse = book_ref.end_verse
+        # Acquire the endpoints from the map
+        end_chapter, end_verse = BOOK_ENDPOINTS[self.current_book]
 
-        # Set the endpoint
-        self.book_endpoint = (f'{self.current_book} {end_chapter}:{end_verse}')
+        # Write the string to set the endpoint
+        self.book_endpoint = f'{self.current_book} {end_chapter}:{end_verse}'
 
     def set_current_book(self) -> None:
         '''
