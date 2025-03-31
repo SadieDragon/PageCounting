@@ -9,7 +9,7 @@ from customtkinter import (CTk,
                            StringVar)
 from typing import Iterator
 from re import match
-from verse_validation.gui_utils import create_label_entry_frame
+from verse_validation.gui_utils import create_label_entry_frame, enforce_focus
 from verse_validation.utils import LetterIterator
 
 
@@ -80,7 +80,8 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         # Create the entry for the footnote
         text = 'What is the first footnote?'
         self.footnote_entry = create_label_entry_frame(self, text)
-        # TODO: Place my cursor blinkies plz
+        # Focus on that entry
+        enforce_focus(self, self.footnote_entry)
 
         # Create a button for the user to confirm and finish
         self.submit_button = CTkButton(self,
