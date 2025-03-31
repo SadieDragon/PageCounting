@@ -55,7 +55,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         # Store the book, which is always attached to any verse in the list
         # Checks for things like `Genesis`, `1 Kings`, `Song of Solomon`
-        pattern = r'^(.*?)\d+:\d+$'
+        pattern = r'^(?:\d\s)?[A-Za-z]+(?:\s[A-Za-z]+)*\s'
         self.book = match(pattern, list_of_verses[0]).group()
 
         # Store the inputs
@@ -264,7 +264,8 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         # Otherwise, try to load the next verse until the selected verse
         while (self.current_verse != skip_to):
-            print(f'Tried to skip to {self.current_verse}; not {skip_to}')
+            # DEBUG PRINT LINE
+            # print(f'Tried to skip to {self.current_verse}; not {skip_to}')
             self.load_next_verse()
 
     def update_previous_entry(self) -> None:
