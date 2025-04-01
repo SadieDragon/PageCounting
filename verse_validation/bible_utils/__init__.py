@@ -1,3 +1,3 @@
 
-from verse_validation.bible_utils.book_endpoints import BOOK_ENDPOINTS
-from verse_validation.bible_utils.books import BOOKS
+from verse_validation.bible_utils.constants \
+    import BOOK_ENDPOINTS, BOOKS
