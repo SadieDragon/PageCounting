@@ -13,7 +13,7 @@ BOOK_ENDPOINTS = {
     '1 Kings': (22, 54),
     '2 Kings': (25, 30),
     '1 Chronicles': (29, 30),
-    '2 Chronicles': (37, 1),
+    '2 Chronicles': (36, 23),
     'Ezra': (10, 44),
     'Nehemiah': (13, 31),
     'Esther': (16, 24),
