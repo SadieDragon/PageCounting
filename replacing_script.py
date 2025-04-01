@@ -5,26 +5,36 @@
 from os import getcwd
 from pathlib import Path
 from pythonbible import get_references
-from verse_validation.bible_utils import BOOKS
+from verse_validation.bible_utils import BOOKS, BOOK_ENDPOINTS
+from yaml import safe_dump
 
 
-# Create dictionary of last chapter and last verse for each book
-book_endpoints = {}
+# Target output file
+root_dir = Path(getcwd())
+# constants_dir = root_dir / 'verse_validation' / 'bible_utils' / 'constants'
+output_file = (root_dir / 'chapter_endpoints').with_suffix('.yaml')
+
+# Dict to store chapter endpoints
+chapter_endings: dict[str, dict[int, int]] = {}
+
+# Populate the dict
 for book in BOOKS:
-    references = get_references(book)[0]  # Get book reference
-    book_endpoints[book] = (references.end_chapter, references.end_verse)
+    # Add the book to the dict with a blank dict
+    chapter_endings[book] = {}
 
-# The target util file
-output_file = (Path(getcwd()) /
-               'verse_validation' /
-               'bible_utils' /
-               'book_endpoints')
-output_file = output_file.with_suffix('.py')
-output_file.touch()
+    # Get the last chapter of the book
+    last_chapter = BOOK_ENDPOINTS[book][0]
 
-# Write a map myself- as a constant :D
-with open(output_file, 'w', encoding='utf-8') as f:
-    f.write('\nBOOK_ENDPOINTS = {\n')
-    for book, (end_chapter, end_verse) in book_endpoints.items():
-        f.write(f'    \'{book}\': ({end_chapter}, {end_verse}),\n')
-    f.write('}\n')
+    # Iterate over each chapter
+    for chapter in range(1, (last_chapter + 1)):
+        # Grab the chapter reference
+        chapter_ref = get_references(f'{book} {chapter}')[0]
+
+        # Grab the end verse
+        last_verse = chapter_ref.end_verse
+
+        # Store the chapter and its last verse
+        chapter_endings[book][chapter] = last_verse
+
+with output_file.open('w', encoding='utf-8') as f:
+    safe_dump(chapter_endings, f, indent=2, sort_keys=False)
