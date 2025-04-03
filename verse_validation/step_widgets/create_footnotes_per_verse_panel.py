@@ -1,21 +1,17 @@
 
-from collections.abc import Callable  # https://stackoverflow.com/a/71118433
 from customtkinter import (CTk,
                            CTkButton,
                            CTkEntry,
-                           CTkFrame,
                            CTkInputDialog,
                            CTkLabel,
                            StringVar)
 from typing import Iterator
 from re import match
-from verse_validation.gui_utils import create_label_entry_frame, enforce_focus
+from verse_validation.step_widgets.base_step_panel import BaseStepPanel
 from verse_validation.utils import LetterIterator
 
 
-class CreateFootnotesPerVersePanel(CTkFrame):
-    parent: CTk
-
+class CreateFootnotesPerVersePanel(BaseStepPanel):
     verse_iter: Iterator[list[str]]
     list_of_valid_verses: list[str]
 
@@ -29,8 +25,6 @@ class CreateFootnotesPerVersePanel(CTkFrame):
     verse_strvar: StringVar
     footnote_entry: CTkEntry
     submit_button: CTkButton
-
-    # callback: None
 
     def __init__(self,
                  parent: CTk,
@@ -50,8 +44,7 @@ class CreateFootnotesPerVersePanel(CTkFrame):
                 with the information.
         '''
         # Create the frame for all of this stuff to go into
-        super().__init__(parent)
-        self.pack(padx=5, pady=5)
+        super().__init__(parent, callback)
 
         # Store the book, which is always attached to any verse in the list
         # Checks for things like `Genesis`, `1 Kings`, `Song of Solomon`
@@ -59,10 +52,8 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         self.book = match(pattern, list_of_verses[0]).group()
 
         # Store the inputs
-        self.parent = parent
         self.verse_iter = iter(list_of_verses)
         self.list_of_valid_verses = list_of_valid_verses
-        self.callback = callback
 
         # Create the holding vars
         self.footnotes_per_verse = {}
@@ -79,9 +70,9 @@ class CreateFootnotesPerVersePanel(CTkFrame):
 
         # Create the entry for the footnote
         text = 'What is the first footnote?'
-        self.footnote_entry = create_label_entry_frame(self, text)
+        self.footnote_entry = self.create_label_entry_frame(text)
         # Focus on that entry
-        enforce_focus(self, self.footnote_entry)
+        self.enforce_focus(self.footnote_entry)
 
         # Create a button for the user to confirm and finish
         self.submit_button = CTkButton(self,
@@ -100,17 +91,6 @@ class CreateFootnotesPerVersePanel(CTkFrame):
         self.add_bind('Tab', self.ask_for_last_footnote)
 
         self.load_next_verse()
-
-    def add_bind(self, key: str, fn: Callable[[], None]) -> None:
-        '''
-        A wrapper for binding a key to a fn without
-        spamming it with keypress information.
-
-        Args:
-            key (str): The keysm for the key that's to be bound.
-            fn (Callable[[], None]): The fn to bind to.
-        '''
-        self.parent.bind(f'<{key}>', lambda _: fn())
 
     def ask_for_last_footnote(self) -> None:
         '''

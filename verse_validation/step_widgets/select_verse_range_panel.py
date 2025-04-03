@@ -1,17 +1,16 @@
 
 # This is for step 1
 
-from customtkinter import CTk, CTkButton, CTkEntry, CTkFrame, CTkLabel
+from customtkinter import CTk, CTkButton, CTkEntry, CTkLabel
 from pythonbible import (convert_reference_to_verse_ids,
                          convert_verse_ids_to_references,
                          format_scripture_references,
                          get_references)
-from verse_validation.gui_utils import create_label_entry_frame, enforce_focus
+from verse_validation.step_widgets.base_step_panel import BaseStepPanel
 
 
-class SelectVerseRangePanel(CTkFrame):
+class SelectVerseRangePanel(BaseStepPanel):
     book: str
-    # callback: None
 
     first_verse_entry: CTkEntry
     last_verse_entry: CTkEntry
@@ -32,12 +31,10 @@ class SelectVerseRangePanel(CTkFrame):
                 with the information.
         '''
         # Create the frame for all of this stuff to go into
-        super().__init__(parent)
-        self.pack(padx=5, pady=5)
+        super().__init__(parent, callback)
 
         # Store the information that was passed in
         self.book = book
-        self.callback = callback
 
         # PEP8 compliant text var for the information label
         text = f'Select verse range for page {current_page} ({self.book})'
@@ -48,11 +45,11 @@ class SelectVerseRangePanel(CTkFrame):
         # Create the entries for the first and last verse to be selected in
         # TODO: Make first_verse be a drop down; previous last verse, or the
         #   next verse in the book?
-        self.first_verse_entry = create_label_entry_frame(self, 'First Verse:')
-        self.last_verse_entry = create_label_entry_frame(self, 'Last Verse:')
+        self.first_verse_entry = self.create_label_entry_frame('First Verse:')
+        self.last_verse_entry = self.create_label_entry_frame('Last Verse:')
 
         # Focus on the first entry
-        enforce_focus(self, self.first_verse_entry)
+        self.enforce_focus(self.first_verse_entry)
 
         # Create a button for the user to confirm and finish.
         submit_button = CTkButton(self, text='Confirm', command=self.submit)
