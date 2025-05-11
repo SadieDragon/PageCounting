@@ -26,3 +26,22 @@
 # Need to also save session data per loop, to ensure that if any error occurs,
 #   no data or work is lost.
 # Need to handle loading paused sessions.
+
+from verse_validation.step_widgets \
+    import CreateFootnotesPerVersePanel, SelectVerseRangePanel
+
+from customtkinter import CTk
+
+
+class VerseValidation(CTk):
+    def __init__(self):
+        super().__init__()
+        self.title('Verse Validation')
+        self.geometry('500x500')
+
+        SelectVerseRangePanel(self, 'Genesis', 1, self.debug)
+
+    def debug(self, verse_list: list):
+        print('Oh you made it here!')
+
+        print(verse_list)

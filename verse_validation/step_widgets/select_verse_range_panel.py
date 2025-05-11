@@ -35,6 +35,7 @@ class SelectVerseRangePanel(BaseStepPanel):
 
         # Store the information that was passed in
         self.book = book
+        self.callback = callback
 
         # PEP8 compliant text var for the information label
         text = f'Select verse range for page {current_page} ({self.book})'
@@ -78,12 +79,14 @@ class SelectVerseRangePanel(BaseStepPanel):
         # Create the list of verses
         verse_list = self.create_list_of_verses(verse_range)
 
-        print(verse_list)  # DEBUG
-        # Return to the parent fn
-        # self.callback(verse_list)
+        # print(verse_list)  # DEBUG
 
         # Also, remove this panel
         self.destroy()
+
+        # Return to the parent fn
+        self.callback(verse_list)
+        return
 
     def create_list_of_verses(self, verse_str: str) -> list[str]:
         '''
